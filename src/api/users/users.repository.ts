@@ -10,7 +10,7 @@ export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto): Promise<any> {
-    const hashedPassword = bcrypt.hashSync(data.password, 10);
+    const hashedPassword = bcrypt.hashSync(data.password_hash, 10);
     return this.prisma.user.create({
       data: {
         username: data.username,
@@ -34,8 +34,8 @@ export class UsersRepository {
 
   async update(id: string, data: Partial<UpdateUserDto>): Promise<any> {
     const updateData: any = { ...data };
-    if (updateData.password) {
-      updateData.password = bcrypt.hashSync(updateData.password, 10);
+    if (updateData.password_hash) {
+      updateData.password_hash = bcrypt.hashSync(updateData.password_hash, 10);
     }
     return this.prisma.user.update({
       where: { id: parseInt(id) },
