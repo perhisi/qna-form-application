@@ -1,1 +1,5 @@
-export class CreateThreadDto {}
+export class CreateThreadDto {
+  title: string;
+  content?: string;
+  userId?: number;
+}

@@ -20,6 +20,6 @@ export class CreateUserDto {
   @MinLength(6)
   @Matches(/[A-Z]/, { message: 'password must contain uppercase letter' })
   @Matches(/[0-9]/, { message: 'password must contain number' })
-  password_hash: string;
+  password: string;
 
 }

@@ -10,7 +10,7 @@ export class UsersRepository {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateUserDto): Promise<any> {
-    const hashedPassword = bcrypt.hashSync(data.password_hash, 10);
+    const hashedPassword = bcrypt.hashSync(data.password, 10);
     return this.prisma.user.create({
       data: {
         username: data.username,
