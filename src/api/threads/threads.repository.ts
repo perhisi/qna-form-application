@@ -20,6 +20,10 @@ export class ThreadsRepository {
     return this.prisma.thread.findMany();
   }
 
+  async findByUser(userId: number) {
+    return this.prisma.thread.findMany({ where: { userId } });
+  }
+
   async findOne(id: number) {
     return this.prisma.thread.findUnique({ where: { id } });
   }

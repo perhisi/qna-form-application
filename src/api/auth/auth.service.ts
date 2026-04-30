@@ -55,42 +55,4 @@ export class AuthService {
   }
 }
 
-// @Injectable()
-// export class AuthService {
-//   constructor(
-//     private readonly usersRepository: UsersRepository,
-//     private readonly jwtService: JwtService,
-//   ) {}
 
-//   async register(createUserDto: CreateUserDto) {
-//     const existing = await this.usersRepository.findByEmail(
-//       createUserDto.email,
-//     );
-//     if (existing) {
-//       throw new ForbiddenException('Email already registered');
-//     }
-
-//     const user = await this.usersRepository.create(createUserDto);
-//     // remove sensitive fields before returning
-//     // Prisma returns numeric id; keep it as-is
-//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     const { password_hash, ...safe } = user as any;
-//     return safe;
-//   }
-
-//   async userLogin(email: string, password: string) {
-//     const user = await this.usersRepository.findByEmail(email);
-//     if (!user) {
-//       throw new ForbiddenException('Invalid credentials');
-//     }
-
-//     const match = await bcrypt.compare(password, user.password_hash);
-//     if (!match) {
-//       throw new ForbiddenException('Invalid credentials');
-//     }
-
-//     const payload = { sub: String(user.id), email: user.email };
-//     const access_token = await this.jwtService.signAsync(payload);
-//     return { access_token };
-//   }
-// }

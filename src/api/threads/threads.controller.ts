@@ -1,13 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ThreadsService } from './threads.service';
 import { CreateThreadDto } from './dto/create-thread.dto';
 import { UpdateThreadDto } from './dto/update-thread.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('threads')
 export class ThreadsController {
   constructor(private readonly threadsService: ThreadsService) {}
 
   @Post()
+  @ApiBearerAuth('JwtAuthGuard')
+  @UseGuards(JwtAuthGuard)
   create(@Body() createThreadDto: CreateThreadDto) {
     return this.threadsService.create(createThreadDto);
   }
@@ -23,12 +37,29 @@ export class ThreadsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateThreadDto: UpdateThreadDto) {
-    return this.threadsService.update(+id, updateThreadDto);
+  @ApiBearerAuth('JwtAuthGuard')
+  @UseGuards(JwtAuthGuard)
+  update(
+    @Param('id') id: string,
+    @Body() updateThreadDto: UpdateThreadDto,
+    @Req() req: any,
+  ) {
+    const userId = Number(req.user?.userId);
+    return this.threadsService.updateByUser(+id, userId, updateThreadDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.threadsService.remove(+id);
+  @ApiBearerAuth('JwtAuthGuard')
+  @UseGuards(JwtAuthGuard)
+  remove(@Param('id') id: string, @Req() req: any) {
+    const userId = Number(req.user?.userId);
+    return this.threadsService.removeByUser(+id, userId);
+  }
+
+  @Get('my-threads/:id')
+  @ApiBearerAuth('JwtAuthGuard')
+  @UseGuards(JwtAuthGuard)
+  findMyThreads(@Param('id') id: string) {
+    return this.threadsService.findByUser(+id);
   }
 }
